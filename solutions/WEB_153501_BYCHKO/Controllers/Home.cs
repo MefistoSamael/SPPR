@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WEB_153501_BYCHKO.ViewModels;
 
 namespace WEB_153501_BYCHKO.Controllers
 {
@@ -6,7 +7,10 @@ namespace WEB_153501_BYCHKO.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            ViewData["text"] = "Лабораторная работа 2";
+            var vm = new DemoViewModel();
+            vm.SelectedId = 0;
+            return View(vm);
         }
     }
 }

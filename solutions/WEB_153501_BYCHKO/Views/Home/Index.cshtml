@@ -1,8 +1,10 @@
-﻿@{
+﻿@using WEB_153501_BYCHKO.ViewModels;
+@{
     ViewBag.Title="Index";
 }
+@model DemoViewModel
 <body>
-    <h1>Лабораторная работа 1</h1>
+    <h1>@ViewData["text"]</h1>
     <h3>Список</h3>
     <ol type="A">
         @for (int i = 1; i <= 10; i++)
@@ -76,5 +78,8 @@
             </div>
         </div>
         <input type="submit" value="send"/>
+
+        @*select*@
+        <select asp-for="SelectedId" asp-items="Model.listDemos" />
     </form>
 </body>
