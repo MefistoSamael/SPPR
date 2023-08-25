@@ -1,7 +1,13 @@
-var builder = WebApplication.CreateBuilder(args);
+using WEB_153501_BYCHKO.Services.EngineTypeCategoryService;
+using WEB_153501_BYCHKO.Services.ProductService;
 
+var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped(typeof(IEngineTypeCategoryService),typeof(EngineTypeMemoryCategoryService));
+builder.Services.AddScoped(typeof(IAirplaneProductService), typeof(AirplaneMemoryProductService));
+
 
 var app = builder.Build();
 

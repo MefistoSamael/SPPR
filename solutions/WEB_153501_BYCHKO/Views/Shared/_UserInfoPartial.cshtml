@@ -1,10 +1,8 @@
 ﻿<!-- Информация пользователя -->
-@*<a class="navbar-text ms-auto"
-   asp-controller="Cart"
-   asp-action="Index">
-    00,0 руб <i class="fa-solid fa-cart-shopping"></i> (0)
-</a>*@
 @await Component.InvokeAsync(nameof(WEB_153501_BYCHKO.ViewComponents.OrderCart))
+<!-- Информация пользователя конец-->
+
+<!--выпадающий список с инфой о пользователе и кнопкой logout-->
 <div class="dropdown ms-4 nav-color">
     <button class="btn btn-secondary dropdown-toggle"
             type="button" id="dropdownMenuButton"
@@ -34,3 +32,4 @@
         </li>
     </ul>
 </div>
+<!--выпадающий список с инфой о пользователе и кнопкой logout конец-->

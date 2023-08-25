@@ -1,8 +1,11 @@
 ﻿@{
+    // достает контролер из маршрута
     var controller = ViewContext.RouteData.Values["controller"]?
            .ToString()?
            .ToLower()
            ?? String.Empty;
+
+    // достает арию(которорая музыкальная группа) из маршрута
     var area = ViewContext.RouteData.Values["area"]?
     .ToString()?
     .ToLower()
@@ -12,9 +15,8 @@
 <a class="navbar-brand" asp-controller="Home" asp-action="Index">15350020</a>
 <div class="navbar-nav">
     <a class="nav-item nav-link @(controller=="home"?"active":"")" asp-controller="Home" asp-action="Index">Лб 1</a>
-    <a class="nav-item nav-link @(controller=="product"?"active":"")" asp-controller="Product" asp-action="Index">Каталог</a>
+    <a class="nav-item nav-link @(controller=="airplaneproduct"?"active":"")" asp-controller="AirplaneProduct" asp-action="Index" asp-route-pageno="1">Каталог</a>
     <a class="nav-item nav-link @(area=="admin"?"active":"")" asp-area="Admin" asp-page="/Index">Администрирование</a>
-
 </div>
 <!-- меню сайта - конец -->
 
