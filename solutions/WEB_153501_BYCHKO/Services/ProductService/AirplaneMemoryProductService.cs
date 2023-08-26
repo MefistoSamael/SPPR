@@ -27,7 +27,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             {
                 new Airplane
                 {
-                    Id="1",
+                    Id=1,
                     Name="Boeing 737-800",
                     Description="очень хороший самолет 10/10",
                     Category= _engineTypes.Find(c => c.NormalizedName.Equals("turbofan"))!,
@@ -36,7 +36,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                 },
                 new Airplane
                 {
-                    Id="2",
+                    Id=2,
                     Name="F-16",
                     Description="еще один очень хороший самолет 10/10",
                     Category= _engineTypes.Find(c => c.NormalizedName.Equals("propfan"))!,
@@ -45,7 +45,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                 },
                 new Airplane
                 {
-                    Id="3",
+                    Id=3,
                     Name="ИЛ-76",
                     Description="большй классный грузовичек, много повидал на своем веку 10/10",
                     Category= _engineTypes.Find(c => c.NormalizedName.Equals("reciprocating"))!,
@@ -54,7 +54,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                 },
                 new Airplane
                 {
-                    Id="4",
+                    Id=4,
                     Name="Airbus A320",
                     Description="очень неплохой самолет 10/10",
                     Category= _engineTypes.Find(c => c.NormalizedName.Equals("turbofan"))!,
@@ -62,7 +62,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                     PhotoPath="Images/airbusa320.jpeg",
                 },
                  new Airplane{
-                    Id = "5",
+                    Id =5,
                     Name = "Boeing 747",
                     Description = "икона стиля среди дальнемагистральных самолетов 100/10",
                     Category = _engineTypes.Find(c => c.NormalizedName.Equals("turbofan"))!,
@@ -71,7 +71,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                 },
                 new Airplane
                 {
-                    Id = "6",
+                    Id = 6,
                     Name = "Cessna 172",
                     Description = "простая рабочая лошадка, всем советую 10/10",
                     Category = _engineTypes.Find(c => c.NormalizedName.Equals("reciprocating"))!,
@@ -80,7 +80,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                 },
                 new Airplane
                 {
-                    Id = "7",
+                    Id = 7,
                     Name = "Antonov An-225",
                     Description = "огромная бандура, понятия не имею как она летает 10/10",
                     Category = _engineTypes.Find(c => c.NormalizedName.Equals("propfan"))!,
@@ -89,7 +89,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                 },
                 new Airplane
                 {
-                    Id = "8",
+                    Id = 8,
                     Name = "Beechcraft King Air",
                     Description = "идеально подходит для темных дел южноамереканских картелей",
                     Category = _engineTypes.Find(c => c.NormalizedName.Equals("turboprop"))!,

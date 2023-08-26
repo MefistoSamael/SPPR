@@ -8,7 +8,7 @@ namespace WEB_153501_BYCHKO.Domain.Entities
 {
     public class Airplane
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
