@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WEB_153501_BYCHKO.API.Data;
+using WEB_153501_BYCHKO.API.Services.ProductService;
 using WEB_153501_BYCHKO.Domain.Entities;
 
 namespace WEB_153501_BYCHKO.API.Controllers
@@ -14,33 +15,44 @@ namespace WEB_153501_BYCHKO.API.Controllers
     [ApiController]
     public class AirplanesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IProductService _service;
 
-        public AirplanesController(AppDbContext context)
+        public AirplanesController(IProductService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Airplanes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Airplane>>> Getairplanes()
+        [Route("")]
+        [Route("{category}/pageno{pageno:int}/pagesize{pagesize:int}")]
+        [Route("{category}/pageno{pageno:int}")]
+        [Route("{category}/pagesize{pagesize:int}")]
+        [Route("pageno{pageno:int}/pagesize{pagesize:int}")]
+        [Route("pageno{pageno:int}")]
+        [Route("{category}")]
+        public async Task<ActionResult<IEnumerable<Airplane>>> Getairplanes(string? category = null, int pageNo = 1, int pageSize = 3)
         {
-          if (_context.airplanes == null)
-          {
-              return NotFound();
-          }
-            return await _context.airplanes.ToListAsync();
+            var responde = await _service.GetProductListAsync(category, pageNo, pageSize);
+            if (!responde.Success)
+            {
+                return NotFound();
+            }
+
+            return responde.Data.Items;
+
         }
 
         // GET: api/Airplanes/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Airplane>> GetAirplane(int id)
         {
-          if (_context.airplanes == null)
-          {
-              return NotFound();
-          }
-            var airplane = await _context.airplanes.FindAsync(id);
+            var response = await _service.GetProductByIdAsync(id);
+            if (!response.Success)
+            {
+                return NotFound();
+            }
+            var airplane = response.Data;
 
             if (airplane == null)
             {
@@ -58,13 +70,11 @@ namespace WEB_153501_BYCHKO.API.Controllers
             if (id != airplane.Id)
             {
                 return BadRequest();
-            }
-
-            _context.Entry(airplane).State = EntityState.Modified;
+            }            
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _service.UpdateProductAsync(id, airplane);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -86,13 +96,7 @@ namespace WEB_153501_BYCHKO.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Airplane>> PostAirplane(Airplane airplane)
         {
-          if (_context.airplanes == null)
-          {
-              return Problem("Entity set 'AppDbContext.airplanes'  is null.");
-          }
-            _context.airplanes.Add(airplane);
-            await _context.SaveChangesAsync();
-
+           await _service.CreateProductAsync(airplane);
             return CreatedAtAction("GetAirplane", new { id = airplane.Id }, airplane);
         }
 
@@ -100,25 +104,20 @@ namespace WEB_153501_BYCHKO.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAirplane(int id)
         {
-            if (_context.airplanes == null)
-            {
-                return NotFound();
-            }
-            var airplane = await _context.airplanes.FindAsync(id);
-            if (airplane == null)
-            {
-                return NotFound();
-            }
-
-            _context.airplanes.Remove(airplane);
-            await _context.SaveChangesAsync();
+            await _service.DeleteProductAsync(id);
 
             return NoContent();
         }
 
         private bool AirplaneExists(int id)
         {
-            return (_context.airplanes?.Any(e => e.Id == id)).GetValueOrDefault();
+            var response =  _service.GetProductByIdAsync(id).Result;
+            if (!response.Success || response.Data == null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

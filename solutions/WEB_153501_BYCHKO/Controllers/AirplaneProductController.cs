@@ -8,11 +8,11 @@ namespace WEB_153501_BYCHKO.Controllers
 {
     public class AirplaneProductController : Controller
     {
-        readonly IAirplaneProductService _productService;
-        readonly IEngineTypeCategoryService _categoryService;
+        readonly IProductService _productService;
+        readonly ICategoryService _categoryService;
 
 
-        public AirplaneProductController(IAirplaneProductService productService, IEngineTypeCategoryService categoryService)
+        public AirplaneProductController(IProductService productService, ICategoryService categoryService)
         {
             this._productService = productService;
             this._categoryService = categoryService;

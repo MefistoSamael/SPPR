@@ -3,7 +3,7 @@ using WEB_153501_BYCHKO.Domain.Models;
 
 namespace WEB_153501_BYCHKO.Services.EngineTypeCategoryService
 {
-    public class EngineTypeMemoryCategoryService : IEngineTypeCategoryService
+    public class MemoryCategoryService : ICategoryService
     {
         public Task<ResponseData<List<EngineTypeCategory>>> GetCategoryListAsync()
         {

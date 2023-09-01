@@ -3,7 +3,7 @@ using WEB_153501_BYCHKO.Domain.Entities;
 
 namespace WEB_153501_BYCHKO.Services.EngineTypeCategoryService
 {
-    public interface IEngineTypeCategoryService
+    public interface ICategoryService
     {
         /// <summary>
         /// Получение списка всех категорий

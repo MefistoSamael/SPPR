@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using WEB_153501_BYCHKO.API.Data;
+using WEB_153501_BYCHKO.API.Services;
+using WEB_153501_BYCHKO.API.Services.CategoryService;
+using WEB_153501_BYCHKO.API.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,18 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+
+// нужен для получения appUrl из launchsettings.json в
+// productService
+builder.Services.AddSingleton(typeof(ConfigurationService));
+
+// нужен для получения макисмального количества страниц в
+// productService
+builder.Services.AddSingleton(builder.Configuration);
+
+builder.Services.AddScoped(typeof(IProductService), typeof(ProductService));
+builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+
 var app = builder.Build();
 
 await DbInitializer.SeedData(app);

@@ -3,7 +3,7 @@ using WEB_153501_BYCHKO.Domain.Models;
 
 namespace WEB_153501_BYCHKO.Services.ProductService
 {
-    public interface IAirplaneProductService
+    public interface IProductService
     {
         /// <summary>
         /// Получение списка всех объектов

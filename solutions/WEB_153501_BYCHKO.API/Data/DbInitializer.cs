@@ -19,7 +19,7 @@ namespace WEB_153501_BYCHKO.API.Data
             var appUrl = app.Configuration["AppUrl"];
 
             //если категории в бд пусты, создаем их
-            if (!context.engineTypes.Any())
+            if (context.engineTypes.Count() == 0)
             {
                 context.engineTypes.AddRange
                     (
@@ -33,7 +33,7 @@ namespace WEB_153501_BYCHKO.API.Data
             context.SaveChanges();
 
             //если продукты в бд пусты, создаем их
-            if (!context.airplanes.Any())
+            if (context.airplanes.Count() == 0)
             {
                 context.airplanes.AddRange
                     (

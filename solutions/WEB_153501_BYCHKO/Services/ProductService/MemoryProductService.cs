@@ -6,14 +6,14 @@ using WEB_153501_BYCHKO.Services.EngineTypeCategoryService;
 
 namespace WEB_153501_BYCHKO.Services.ProductService
 {
-    public class AirplaneMemoryProductService : IAirplaneProductService
+    public class MemoryProductService : IProductService
     {
         List<Airplane> _airplanes;
         List<EngineTypeCategory> _engineTypes;
         IConfiguration _config;
 
-        public AirplaneMemoryProductService([FromServices] IConfiguration config,
-                                            IEngineTypeCategoryService categoryService)
+        public MemoryProductService([FromServices] IConfiguration config,
+                                            ICategoryService categoryService)
         {
             _engineTypes = categoryService.GetCategoryListAsync().Result.Data;
             _config = config;
