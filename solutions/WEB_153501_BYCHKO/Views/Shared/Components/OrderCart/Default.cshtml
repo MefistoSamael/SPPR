@@ -1,0 +1,8 @@
+﻿@model Tuple<int, int>
+
+<!-- корзина -->
+<a class="navbar-text ms-auto"
+   asp-controller="Cart"
+   asp-action="Index">
+    @Model.Item1 руб <i class="fa-solid fa-cart-shopping"></i> (@Model.Item2)
+</a>
