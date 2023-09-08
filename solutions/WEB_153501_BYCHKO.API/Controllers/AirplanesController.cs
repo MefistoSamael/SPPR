@@ -39,7 +39,7 @@ namespace WEB_153501_BYCHKO.API.Controllers
                 return NotFound();
             }
 
-            return responde.Data.Items;
+            return Ok(responde);
 
         }
 
@@ -59,7 +59,8 @@ namespace WEB_153501_BYCHKO.API.Controllers
                 return NotFound();
             }
 
-            return airplane;
+            //return airplane;
+            return Ok(response);
         }
 
         // PUT: api/Airplanes/5

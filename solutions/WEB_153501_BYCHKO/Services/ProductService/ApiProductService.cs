@@ -73,9 +73,10 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             {
                 try
                 {
-#pragma warning disable CS8603 // Possible null reference return.
-                    return await response.Content.ReadFromJsonAsync<ResponseData<ListModel<Airplane>>>(_serializerOptions);
-#pragma warning restore CS8603 // Possible null reference return.
+                    //#pragma warning disable CS8603 // Possible null reference return.
+                    var content = response.Content;     
+                    return await response.Content.ReadFromJsonAsync<ResponseData<ListModel<Airplane>>>();
+//#pragma warning restore CS8603 // Possible null reference return.
 
                 }
                 catch (JsonException ex)

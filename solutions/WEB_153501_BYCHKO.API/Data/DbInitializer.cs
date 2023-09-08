@@ -43,7 +43,7 @@ namespace WEB_153501_BYCHKO.API.Data
                             Description = "очень хороший самолет 10/10",
                             Category = context.engineTypes.Where(c => c.NormalizedName.Equals("turbofan")).First()!,
                             Price = 125,
-                            PhotoPath = $"{appUrl} Images/boeing737800.jpeg",
+                            PhotoPath = $"{appUrl}Images/boeing737800.jpeg",
                         },
                         new Airplane
                         {
@@ -51,7 +51,7 @@ namespace WEB_153501_BYCHKO.API.Data
                             Description = "еще один очень хороший самолет 10/10",
                             Category = context.engineTypes.Where(c => c.NormalizedName.Equals("propfan")).First()!,
                             Price = 1700,
-                            PhotoPath = $"{appUrl} Images/f16.jpeg",
+                            PhotoPath = $"{appUrl}Images/f16.jpeg",
                         },
                         new Airplane
                         {
@@ -59,7 +59,7 @@ namespace WEB_153501_BYCHKO.API.Data
                             Description = "большй классный грузовичек, много повидал на своем веку 10/10",
                             Category = context.engineTypes.Where(c => c.NormalizedName.Equals("reciprocating")).First()!,
                             Price = 25,
-                            PhotoPath = $"{appUrl} Images/il76.jpeg",
+                            PhotoPath = $"{appUrl}Images/il76.jpeg",
                         },
                         new Airplane
                         {
@@ -67,7 +67,7 @@ namespace WEB_153501_BYCHKO.API.Data
                             Description = "очень неплохой самолет 10/10",
                             Category = context.engineTypes.Where(c => c.NormalizedName.Equals("turbofan")).First()!,
                             Price = 156,
-                            PhotoPath = $"{appUrl} Images/airbusa320.jpeg",
+                            PhotoPath = $"{appUrl}Images/airbusa320.jpeg",
                         },
                          new Airplane
                          {
@@ -75,7 +75,7 @@ namespace WEB_153501_BYCHKO.API.Data
                              Description = "икона стиля среди дальнемагистральных самолетов 100/10",
                              Category = context.engineTypes.Where(c => c.NormalizedName.Equals("turbofan")).First()!,
                              Price = 350,
-                             PhotoPath = $"{appUrl} Images/boeing747.jpeg",
+                             PhotoPath = $"{appUrl}Images/boeing747.jpeg",
                          },
                         new Airplane
                         {
@@ -83,7 +83,7 @@ namespace WEB_153501_BYCHKO.API.Data
                             Description = "простая рабочая лошадка, всем советую 10/10",
                             Category = context.engineTypes.Where(c => c.NormalizedName.Equals("reciprocating")).First()!,
                             Price = 75,
-                            PhotoPath = $"{appUrl} Images/cessna172.jpeg",
+                            PhotoPath = $"{appUrl}Images/cessna172.jpeg",
                         },
                         new Airplane
                         {
@@ -91,7 +91,7 @@ namespace WEB_153501_BYCHKO.API.Data
                             Description = "огромная бандура, понятия не имею как она летает 10/10",
                             Category = context.engineTypes.Where(c => c.NormalizedName.Equals("propfan")).First()!,
                             Price = 500,
-                            PhotoPath = $"{appUrl} Images/antonov225.jpeg",
+                            PhotoPath = $"{appUrl}Images/antonov225.jpeg",
                         },
                         new Airplane
                         {
@@ -99,7 +99,7 @@ namespace WEB_153501_BYCHKO.API.Data
                             Description = "идеально подходит для темных дел южноамереканских картелей",
                             Category = context.engineTypes.Where(c => c.NormalizedName.Equals("turboprop")).First()!,
                             Price = 250,
-                            PhotoPath = $"{appUrl} Images/kingair.jpeg",
+                            PhotoPath = $"{appUrl}Images/kingair.jpeg",
                         }
                     );
             }
