@@ -177,6 +177,9 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
                 airplane.Description = product.Description;
                 airplane.Name = product.Name;
 
+                // попробовать раскоментить эту штуку и закоментить все остальное
+                //_context.Attach(airplane).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
             }
         }
