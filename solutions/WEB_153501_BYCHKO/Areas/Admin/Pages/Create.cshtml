@@ -1,0 +1,54 @@
+﻿@page
+@model WEB_153501_BYCHKO.Areas.Admin.Pages.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Airplane</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Airplane.Name" class="control-label"></label>
+                <input asp-for="Airplane.Name" class="form-control" />
+                <span asp-validation-for="Airplane.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Airplane.Description" class="control-label"></label>
+                <input asp-for="Airplane.Description" class="form-control" />
+                <span asp-validation-for="Airplane.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Airplane.Price" class="control-label"></label>
+                <input asp-for="Airplane.Price" class="form-control" />
+                <span asp-validation-for="Airplane.Price" class="text-danger"></span>
+            </div>
+            <div class ="form-group">
+                <label asp-for="Airplane.Category" class="control-label"></label>
+                    <select asp-for="@Model.CategoryId" asp-items="@Model.selectList"></select>
+                <span asp-validation-for="Airplane.Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" asp-for="Image" class="form-control"/>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

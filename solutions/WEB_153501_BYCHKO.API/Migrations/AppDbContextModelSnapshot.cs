@@ -34,7 +34,6 @@ namespace WEB_153501_BYCHKO.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhotoPath")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Price")

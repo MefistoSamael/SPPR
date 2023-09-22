@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using Azure;
+using Azure.Core;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using WEB_153501_BYCHKO.Domain.Entities;
@@ -26,19 +28,96 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             _logger = logger;
         }
 
-        public Task<ResponseData<Airplane>> CreateProductAsync(Airplane product, IFormFile? formFile)
+        public async Task<ResponseData<Airplane>> CreateProductAsync(Airplane product, IFormFile? formFile)
         {
-            throw new NotImplementedException();
+            var urlString
+            = new
+            StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/");
+
+            var response = await _httpClient.PostAsJsonAsync(new Uri(urlString.ToString()), product);
+
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    var plane = await response.Content.ReadFromJsonAsync<Airplane>();
+
+                    if (formFile != null)
+                        await SaveImageAsync(plane!.Id, formFile);
+
+                    return new ResponseData<Airplane> { Data = plane! };
+                }
+                catch (JsonException ex)
+                {
+                    _logger.LogError($"-----> Ошибка: {ex.Message}");
+                    return  new ResponseData<Airplane>
+                    {
+                        Success = false,
+                        ErrorMessage = $"Ошибка: {ex.Message}"
+                    };
+                }
+            }
+            else
+            {
+                _logger.LogError($"-----> Данные не получены от сервера. Error: {response.StatusCode.ToString()}");
+                return new ResponseData<Airplane>
+                {
+                    Success = false,
+                    ErrorMessage = $"Данные не получены от сервера. Error: {response.StatusCode.ToString()}"
+                };
+
+            }
         }
 
-        public Task DeleteProductAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            var urlString
+            = new
+            StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/{id}");
+
+            // отправить запрос к API
+            var response = await _httpClient.DeleteAsync(
+            new Uri(urlString.ToString()));
+
         }
 
-        public Task<ResponseData<Airplane>> GetProductByIdAsync(int id)
+        public async Task<ResponseData<Airplane>> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var urlString
+            = new
+            StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/{id}");
+
+            // отправить запрос к API
+            var response = await _httpClient.GetAsync(
+            new Uri(urlString.ToString()));
+
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    #pragma warning disable CS8603 // Possible null reference return.
+                    var content = response.Content;
+                    return await response.Content.ReadFromJsonAsync<ResponseData<Airplane>>()!;
+                    #pragma warning restore CS8603 // Possible null reference return.
+
+                }
+                catch (JsonException ex)
+                {
+                    _logger.LogError($"-----> Ошибка: {ex.Message}");
+                    return new ResponseData<Airplane>
+                    {
+                        Success = false,
+                        ErrorMessage = $"Ошибка: {ex.Message}"
+                    };
+                }
+            }
+            _logger.LogError($"-----> Данные не получены от сервера. Error: {response.StatusCode.ToString()}");
+            return new ResponseData<Airplane>
+            {
+                Success = false,
+                ErrorMessage = $"Данные не получены от сервера. Error: {response.StatusCode.ToString()}"
+            };
+
         }
 
         public async Task<ResponseData<ListModel<Airplane>>> GetProductListAsync(
@@ -98,9 +177,50 @@ namespace WEB_153501_BYCHKO.Services.ProductService
         }
 
 
-        public Task UpdateProductAsync(int id, Airplane product, IFormFile? formFile)
+        public async Task UpdateProductAsync(int id, Airplane product, IFormFile? formFile)
         {
-            throw new NotImplementedException();
+            var urlString
+            = new
+            StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/{id}");
+
+            var response = await _httpClient.PutAsJsonAsync(new Uri(urlString.ToString()), product);
+
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    var plane = await response.Content.ReadFromJsonAsync<Airplane>();
+
+                    if (formFile != null)
+                        await SaveImageAsync(plane!.Id, formFile);
+
+                    return;
+                }
+                catch (JsonException ex)
+                {
+                    _logger.LogError($"-----> Ошибка: {ex.Message}");
+                }
+            }
+            _logger.LogError($"-----> Данные не получены от сервера. Error: {response.StatusCode.ToString()}");
+        }
+
+        private async Task SaveImageAsync(int id, IFormFile image)
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri
+            ($"{_httpClient.BaseAddress.AbsoluteUri}Airplanes/{id}")
+            };
+            var content = new MultipartFormDataContent();
+            var streamContent =
+            new StreamContent(image.OpenReadStream());
+            content.Add(streamContent, "formFile", image.FileName);
+            request.Content = content;
+            var answ = await _httpClient.SendAsync(request);
+            if (!answ.IsSuccessStatusCode)
+                throw new Exception("Couldnt save image. Probably wrong plane id");
         }
     }
 }
+

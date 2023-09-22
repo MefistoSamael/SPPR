@@ -27,6 +27,8 @@ builder.Services.AddSingleton(builder.Configuration);
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductService));
 builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 await DbInitializer.SeedData(app);

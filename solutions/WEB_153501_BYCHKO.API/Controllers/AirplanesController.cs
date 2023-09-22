@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WEB_153501_BYCHKO.API.Data;
 using WEB_153501_BYCHKO.API.Services.ProductService;
 using WEB_153501_BYCHKO.Domain.Entities;
+using WEB_153501_BYCHKO.Domain.Models;
 
 namespace WEB_153501_BYCHKO.API.Controllers
 {
@@ -16,10 +17,16 @@ namespace WEB_153501_BYCHKO.API.Controllers
     public class AirplanesController : ControllerBase
     {
         private readonly IProductService _service;
+        private readonly IWebHostEnvironment env;
+        private readonly IConfiguration conf;
+        private readonly string appUrl;
 
-        public AirplanesController(IProductService service)
+        public AirplanesController(IProductService service, IWebHostEnvironment env, IConfiguration conf)
         {
             _service = service;
+            this.env = env;
+            this.conf = conf;
+            appUrl = conf.GetSection("AppUrl").Value!;
         }
 
         // GET: api/Airplanes
@@ -66,7 +73,7 @@ namespace WEB_153501_BYCHKO.API.Controllers
         // PUT: api/Airplanes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAirplane(int id, Airplane airplane)
+        public async Task<ActionResult<ResponseData<Airplane>>> PutAirplane(int id, Airplane airplane)
         {
             if (id != airplane.Id)
             {
@@ -76,6 +83,7 @@ namespace WEB_153501_BYCHKO.API.Controllers
             try
             {
                 await _service.UpdateProductAsync(id, airplane);
+                return Ok(airplane);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -88,8 +96,6 @@ namespace WEB_153501_BYCHKO.API.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Airplanes
@@ -120,5 +126,20 @@ namespace WEB_153501_BYCHKO.API.Controllers
 
             return true;
         }
+
+        // POST: api/Airplanes/5
+        [HttpPost("{id}")]
+        public async Task<ActionResult<ResponseData<string>>> PostImage(
+                                                                int id,
+                                                                IFormFile formFile)
+        {
+            var response = await _service.SaveImageAsync(id, formFile);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return NotFound(response);
+        }
+
     }
 }

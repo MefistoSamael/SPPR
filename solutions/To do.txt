@@ -1,0 +1,4 @@
+add mime type to plane
+add ApiCategoryService
+Delete CategoryId from plane
+Update Delete function that plane with assciated photo will be deleted 

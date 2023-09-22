@@ -10,17 +10,18 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
     {
         AppDbContext _context;
         private readonly int _maxPageSize;
-        private readonly string _appUrl;
-        
+        private readonly IWebHostEnvironment env;
+        private readonly IHttpContextAccessor accessor;
 
-        public ProductService(AppDbContext context, ConfigurationManager configurationManager, ConfigurationService configurationService)
+        public ProductService(AppDbContext context, ConfigurationManager configurationManager,
+                            ConfigurationService configurationService, IWebHostEnvironment env,
+                            IHttpContextAccessor accessor)
         {
             _context = context;
 
-            // не выльется ли такой подход к получению appUrl и MaxPageSize 
-            // в более сложное тестирование и в нагромождение кода
-            _appUrl = configurationService.Configuration.GetValue<string>("applicationUrl", "someDefaultValue")!;
             _maxPageSize = Convert.ToInt32(configurationManager["MaxPageSize"]);
+            this.env = env;
+            this.accessor = accessor;
 
         }
 
@@ -142,17 +143,46 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
             else
                 airplane = responseData.Data;
 
-            
-            var photoPath = Path.Combine(_appUrl,"wwwroot","Imgaes", formFile.FileName);
+            var host = "https://" + accessor.HttpContext!.Request.Host;
 
-            airplane.PhotoPath = photoPath;
-            using (Stream fstream = new FileStream(photoPath, FileMode.Create))
+            var imageFolder = Path.Combine(env.WebRootPath, "Images");
+
+
+            if (formFile != null)
             {
-                await formFile.CopyToAsync(fstream);
-            }
+                // удаляем предыдущее изображение
+                if (!String.IsNullOrEmpty(airplane.PhotoPath))
+                {
+                    // получаем путь предыдущего изображения как путь к папке с изображеним +
+                    // имя и расширение самого изображения
+                    var prevImage = Path.Combine(imageFolder, Path.GetFileName(airplane.PhotoPath));
+                    File.Delete(prevImage);
 
-            _context.SaveChanges();
-            return new ResponseData<string> { Data = photoPath };
+                    // или File.Delete(airplane.PhotoPath);
+                }
+
+                // Создать имя файла
+                var ext = Path.GetExtension(formFile.FileName);
+                var fName = Path.ChangeExtension(Path.GetRandomFileName(), ext);
+                // получаем путь куда сохранять фото
+                var filePath = Path.Combine(imageFolder, fName);
+
+                // Сохранить файл
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(fileStream);
+                }
+
+                airplane.PhotoPath = $"{host}/Images/{fName}";
+
+                await _context.SaveChangesAsync();
+                return new ResponseData<string>
+                {
+                    Data = airplane.PhotoPath
+                };
+            }
+            else
+            { return new ResponseData<string> { Success = false, ErrorMessage = "Error: no file where provided" }; }
         }
 
         // в методе update может возникнуть исключение при удалении
