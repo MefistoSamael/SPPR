@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using WEB_153501_BYCHKO.API.Data;
 using WEB_153501_BYCHKO.Domain.Entities;
 using WEB_153501_BYCHKO.Domain.Models;
@@ -46,15 +47,20 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
         public async Task DeleteProductAsync(int id)
         {
             var airplane = await _context.airplanes.FindAsync(id);
-            
+
             if (airplane != null)
+            {
+                var imageFolder = Path.Combine(env.WebRootPath, "Images");
+                DeleteImage(imageFolder, airplane);
                 _context.airplanes.Remove(airplane);
+            }
 
             _context.SaveChanges();
         }
 
         public async Task<ResponseData<Airplane>> GetProductByIdAsync(int id)
         {
+            TempMethod();
             var query = _context.airplanes.AsQueryable();
 
            
@@ -151,15 +157,7 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
             if (formFile != null)
             {
                 // удаляем предыдущее изображение
-                if (!String.IsNullOrEmpty(airplane.PhotoPath))
-                {
-                    // получаем путь предыдущего изображения как путь к папке с изображеним +
-                    // имя и расширение самого изображения
-                    var prevImage = Path.Combine(imageFolder, Path.GetFileName(airplane.PhotoPath));
-                    File.Delete(prevImage);
-
-                    // или File.Delete(airplane.PhotoPath);
-                }
+                DeleteImage(imageFolder, airplane);
 
                 // Создать имя файла
                 var ext = Path.GetExtension(formFile.FileName);
@@ -174,6 +172,7 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
                 }
 
                 airplane.PhotoPath = $"{host}/Images/{fName}";
+                airplane.MIMEType = ext;
 
                 await _context.SaveChangesAsync();
                 return new ResponseData<string>
@@ -185,6 +184,22 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
             { return new ResponseData<string> { Success = false, ErrorMessage = "Error: no file where provided" }; }
         }
 
+        private void DeleteImage(string imageFolder, Airplane airplane)
+        {
+            // удаляем предыдущее изображение
+            //
+            // стоит делать проверку на null в этом методе
+            // или об этом должен позаботиться вызывающий метод?
+            if (!String.IsNullOrEmpty(airplane.PhotoPath))
+            {
+                // получаем путь предыдущего изображения как путь к папке с изображеним +
+                // имя и расширение самого изображения
+                var prevImage = Path.Combine(imageFolder, Path.GetFileName(airplane.PhotoPath));
+                File.Delete(prevImage);
+
+                // или File.Delete(airplane.PhotoPath);
+            }
+        }
         // в методе update может возникнуть исключение при удалении
         // объекта в момент его изменения. Где его обрабатывать?
         public async Task UpdateProductAsync(int id, Airplane product)
@@ -211,6 +226,21 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
                 //_context.Attach(airplane).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        private async void TempMethod()
+        {
+            var respData = await GetProductListAsync(null, 1, 20);
+
+            foreach(var item in respData.Data.Items)
+            {
+                item.MIMEType = Path.GetExtension(item.PhotoPath);
+
+                _context.airplanes.Update(item);
+
+                // Save changes in database
+                _context.SaveChanges();
             }
         }
     }

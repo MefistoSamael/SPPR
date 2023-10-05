@@ -24,14 +24,14 @@ namespace WEB_153501_BYCHKO.API.Controllers
 
         // GET: api/EngineTypeCategories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EngineTypeCategory>>> GetengineTypes()
+        public async Task<ActionResult<IEnumerable<EngineTypeCategory>>> GetEngineTypes()
         {
             var categories = (await _service.GetCategoryListAsync()).Data;
           if (categories == null)
           {
               return NotFound();
           }
-            return categories;
+            return Ok(categories);
         }
 
         // GET: api/EngineTypeCategories/5

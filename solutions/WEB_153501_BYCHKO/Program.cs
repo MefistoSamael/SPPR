@@ -7,13 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.AddScoped(typeof(ICategoryService),typeof(MemoryCategoryService));
-builder.Services.AddScoped(typeof(IProductService), typeof(MemoryProductService));
+//builder.Services.AddScoped(typeof(ICategoryService),typeof(MemoryCategoryService));
+//builder.Services.AddScoped(typeof(IProductService), typeof(MemoryProductService));
 
 var uriData = builder.Configuration["UriData:ApiUri"];
 
 builder.Services
 .AddHttpClient<IProductService, ApiProductService>(opt =>
+opt.BaseAddress = new Uri(uriData!));
+
+builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt => 
 opt.BaseAddress = new Uri(uriData!));
 
 builder.Services.AddRazorPages();

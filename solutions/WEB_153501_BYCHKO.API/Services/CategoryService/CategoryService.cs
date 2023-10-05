@@ -14,7 +14,7 @@ namespace WEB_153501_BYCHKO.API.Services.CategoryService
         }
         public async Task<ResponseData<List<EngineTypeCategory>>> GetCategoryListAsync()
         {
-            return new ResponseData<List<EngineTypeCategory>> { Data =  await _appDbContext.engineTypes.ToListAsync() };
+            return new ResponseData<List<EngineTypeCategory>> { Data = await _appDbContext.engineTypes.ToListAsync() };
         }
     }
 }

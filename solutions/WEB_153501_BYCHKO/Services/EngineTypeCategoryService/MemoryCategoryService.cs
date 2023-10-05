@@ -7,7 +7,7 @@ namespace WEB_153501_BYCHKO.Services.EngineTypeCategoryService
     {
         public Task<ResponseData<List<EngineTypeCategory>>> GetCategoryListAsync()
         {
-            var categories = new List<EngineTypeCategory> 
+            var categories = new List<EngineTypeCategory>
             {
                 new EngineTypeCategory{ Id = 1, Name="турбовинтовой", NormalizedName="turboprop"},
                 new EngineTypeCategory{ Id = 2, Name="поршневой", NormalizedName="reciprocating"},

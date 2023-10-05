@@ -15,14 +15,12 @@ namespace WEB_153501_BYCHKO.Domain.Entities
 
         public string Description { get; set; }
 
-        public int CategoryId { get; set; }
-
         public EngineTypeCategory? Category { get; set; }
 
         public int Price { get; set; }
 
         public string? PhotoPath { get; set; }
 
-        //public string MIMEType { get; set; }
+        public string? MIMEType { get; set; }
     }
 }
