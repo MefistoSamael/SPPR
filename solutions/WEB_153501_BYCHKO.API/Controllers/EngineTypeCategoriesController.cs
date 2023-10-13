@@ -26,7 +26,7 @@ namespace WEB_153501_BYCHKO.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EngineTypeCategory>>> GetEngineTypes()
         {
-            var categories = (await _service.GetCategoryListAsync()).Data;
+            var categories = (await _service.GetCategoryListAsync());
           if (categories == null)
           {
               return NotFound();

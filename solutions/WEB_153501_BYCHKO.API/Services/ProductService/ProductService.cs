@@ -60,7 +60,6 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
 
         public async Task<ResponseData<Airplane>> GetProductByIdAsync(int id)
         {
-            TempMethod();
             var query = _context.airplanes.AsQueryable();
 
            
@@ -226,21 +225,6 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
                 //_context.Attach(airplane).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
-            }
-        }
-
-        private async void TempMethod()
-        {
-            var respData = await GetProductListAsync(null, 1, 20);
-
-            foreach(var item in respData.Data.Items)
-            {
-                item.MIMEType = Path.GetExtension(item.PhotoPath);
-
-                _context.airplanes.Update(item);
-
-                // Save changes in database
-                _context.SaveChanges();
             }
         }
     }

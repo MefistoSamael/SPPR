@@ -23,7 +23,7 @@ namespace WEB_153501_BYCHKO.Services.EngineTypeCategoryService
             // подготовка URL запроса
             var urlString
             = new
-            StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/");
+            StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}EngineTypeCategories/");
 
             // отправить запрос к API
             var response = await _httpClient.GetAsync(

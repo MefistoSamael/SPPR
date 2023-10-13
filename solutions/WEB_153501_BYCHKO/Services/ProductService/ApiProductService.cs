@@ -1,6 +1,10 @@
 ﻿using Azure;
 using Azure.Core;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using NuGet.Common;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using WEB_153501_BYCHKO.Domain.Entities;
@@ -14,10 +18,12 @@ namespace WEB_153501_BYCHKO.Services.ProductService
         private readonly string? _pageSize;
         private readonly JsonSerializerOptions _serializerOptions;
         private readonly ILogger<ApiProductService> _logger;
+        private readonly HttpContext _httpContext;
 
         public ApiProductService(HttpClient httpClient,
                                  IConfiguration configuration,
-                                 ILogger<ApiProductService> logger)
+                                 ILogger<ApiProductService> logger,
+                                 IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
             _pageSize = configuration.GetSection("ItemsPerPage").Value;
@@ -26,6 +32,7 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             _logger = logger;
+            _httpContext = httpContextAccessor.HttpContext!;
         }
 
         public async Task<ResponseData<Airplane>> CreateProductAsync(Airplane product, IFormFile? formFile)
@@ -34,6 +41,12 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             = new
             StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/");
 
+            // полчуение токена
+            var token = await _httpContext.GetTokenAsync("access_token");
+            // установка токена в заголовки для авторизации в api
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
+            //отправка запроса к api
             var response = await _httpClient.PostAsJsonAsync(new Uri(urlString.ToString()), product);
 
             if (response.IsSuccessStatusCode)
@@ -75,6 +88,11 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             = new
             StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/{id}");
 
+            // полчуение токена
+            var token = await _httpContext.GetTokenAsync("access_token");
+            // установка токена в заголовки для авторизации в api
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
             // отправить запрос к API
             var response = await _httpClient.DeleteAsync(
             new Uri(urlString.ToString()));
@@ -87,6 +105,11 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             = new
             StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/{id}");
 
+            // полчуение токена
+            var token = await _httpContext.GetTokenAsync("access_token");
+            // установка токена в заголовки для авторизации в api
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            
             // отправить запрос к API
             var response = await _httpClient.GetAsync(
             new Uri(urlString.ToString()));
@@ -144,6 +167,11 @@ namespace WEB_153501_BYCHKO.Services.ProductService
                 urlString.Append(QueryString.Create("pagesize", _pageSize));
             }
 
+            // полчуение токена
+            var token = await _httpContext.GetTokenAsync("access_token");
+            // установка токена в заголовки для авторизации в api
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
             // отправить запрос к API
             var response = await _httpClient.GetAsync(
             new Uri(urlString.ToString()));
@@ -183,6 +211,12 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             = new
             StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}airplanes/{id}");
 
+            // полчуение токена
+            var token = await _httpContext.GetTokenAsync("access_token");
+            // установка токена в заголовки для авторизации в api
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
+            //отправка запроса к api
             var response = await _httpClient.PutAsJsonAsync(new Uri(urlString.ToString()), product);
 
             if (response.IsSuccessStatusCode)

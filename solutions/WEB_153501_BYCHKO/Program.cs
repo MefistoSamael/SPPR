@@ -21,6 +21,26 @@ opt.BaseAddress = new Uri(uriData!));
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddAuthentication(opt =>
+{
+opt.DefaultScheme = "cookie";
+opt.DefaultChallengeScheme = "oidc";
+})
+.AddCookie("cookie")
+.AddOpenIdConnect("oidc", options =>
+ {
+    options.Authority = builder.Configuration["InteractiveServiceSettings:AuthorityUrl"];
+    options.ClientId = builder.Configuration["InteractiveServiceSettings:ClientId"];
+    options.ClientSecret = builder.Configuration["InteractiveServiceSettings:ClientSecret"];
+    // Получить Claims пользователя
+    options.GetClaimsFromUserInfoEndpoint = true;
+    options.ResponseType = "code";
+    options.ResponseMode = "query";
+    options.SaveTokens = true;
+ });
+
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
@@ -33,10 +53,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
@@ -44,6 +63,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages();
+app.MapRazorPages().RequireAuthorization();
 
 app.Run();

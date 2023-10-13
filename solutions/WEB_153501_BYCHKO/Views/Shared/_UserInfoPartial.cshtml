@@ -1,35 +1,56 @@
-﻿<!-- Информация пользователя -->
-@await Component.InvokeAsync(nameof(WEB_153501_BYCHKO.ViewComponents.OrderCart))
-<!-- Информация пользователя конец-->
+﻿@{
+    var userEmail = User.Claims.FirstOrDefault(c =>
+                c.Type.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                ?.Value;
+}
 
-<!--выпадающий список с инфой о пользователе и кнопкой logout-->
-<div class="dropdown ms-4 nav-color">
-    <button class="btn btn-secondary dropdown-toggle"
-            type="button" id="dropdownMenuButton"
-            data-bs-toggle="dropdown"
-            aria-expanded="false">
-        User@gmail.com
-        <img src="images/default-profile-picture.png" width="30"
-             alt="User" class="rounded nav-color" />
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <li>
-            <span class="dropdown-item-text">
-                <img src="images/default-profile-picture.png"
-                     width="50" alt="User" class="rounded" />
-                user@gmail.com
-            </span>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-            <form id="logoutForm" class="form-inline">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark"
-                        asp-controller="Idenity"
-                        asp-action="LogOut">
-                    Logout
-                </button>
-            </form>
-        </li>
-    </ul>
-</div>
-<!--выпадающий список с инфой о пользователе и кнопкой logout конец-->
+@if(User.Identity.IsAuthenticated)
+{
+    <!-- Информация пользователя -->
+    @await Component.InvokeAsync(nameof(WEB_153501_BYCHKO.ViewComponents.OrderCart))
+    <!-- Информация пользователя конец-->
+    <!--выпадающий список с инфой о пользователе и кнопкой logout-->
+    <div class="dropdown ms-4 nav-color">
+        <button class="btn btn-secondary dropdown-toggle"
+                type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            @userEmail
+            <img src="https://localhost:7003/avatar" width="30"
+                 alt="User" class="rounded nav-color" />
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li>
+                <span class="dropdown-item-text">
+                    <img src="https://localhost:7003/avatar"
+                         width="50" alt="User" class="rounded" />
+                    @userEmail
+                </span>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form id="logoutForm" class="form-inline">
+                    <button id="logout" type="submit" class="nav-link btn btn-link text-dark"
+                            asp-controller="Identity"
+                            asp-action="Logout">
+                        Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    <!--выпадающий список с инфой о пользователе и кнопкой logout конец-->
+}
+else
+{
+    <form id="loginForm" class="form-inline">
+        <button id="login" type="submit" class="nav-link btn btn-link text-dark"
+                asp-controller="Identity"
+                asp-action="Login">
+            <p class="navbar-text">
+                Login
+            </p>
+        </button>
+    </form>
+}
+
