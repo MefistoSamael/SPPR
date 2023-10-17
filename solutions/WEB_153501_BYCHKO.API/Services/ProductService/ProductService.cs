@@ -15,7 +15,7 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
         private readonly IHttpContextAccessor accessor;
 
         public ProductService(AppDbContext context, ConfigurationManager configurationManager,
-                            ConfigurationService configurationService, IWebHostEnvironment env,
+                            IWebHostEnvironment env,
                             IHttpContextAccessor accessor)
         {
             _context = context;

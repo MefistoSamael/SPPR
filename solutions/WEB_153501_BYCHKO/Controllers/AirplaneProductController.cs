@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WEB_153501_BYCHKO.Domain.Entities;
 using WEB_153501_BYCHKO.Domain.Models;
+using WEB_153501_BYCHKO.Extensions;
 using WEB_153501_BYCHKO.Services.EngineTypeCategoryService;
 using WEB_153501_BYCHKO.Services.ProductService;
 
@@ -39,6 +40,11 @@ namespace WEB_153501_BYCHKO.Controllers
             // чтобы отображать категорию "все", на странице с типами
             ViewData["currentCategory"] = currentCategory == null ? "Все" : currentCategory.Name;
             ViewBag.categories = categories;
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_FurnituriesPartial", productResponse.Data);
+            }
 
             return View(productResponse.Data);
         }
