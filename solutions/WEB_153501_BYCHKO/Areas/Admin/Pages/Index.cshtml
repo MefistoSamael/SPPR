@@ -3,33 +3,55 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    var request = ViewContext.HttpContext.Request;
+
+    // понадобится когда то после 3 лабы
+    var returnUrl = request.Path + request.QueryString.ToUriComponent();
+
+    string? category = request.Query["category"].ToString();
+
+    // корректное получение предыдущей и следующей страницы
+    // надо для кнопок взад и вперед
+    int prev = Model.Airplane.CurrentPage == 1
+         ? 1
+         : Model.Airplane.CurrentPage - 1;
+
+    int next = Model.Airplane.CurrentPage == Model.Airplane.TotalPages
+    ? Model.Airplane.TotalPages
+    : Model.Airplane.CurrentPage + 1;
 }
+
 
 <h1>AAAADMIIIIIN</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+<Pager current-page="@Model.Airplane.CurrentPage"
+       total-pages="@Model.Airplane.TotalPages"
+       admin="true">
+</Pager>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Airplane[0].Name)
+                @Html.DisplayNameFor(model => model.Airplane.Items[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Airplane[0].Description)
+                @Html.DisplayNameFor(model => model.Airplane.Items[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Airplane[0].Price)
+                @Html.DisplayNameFor(model => model.Airplane.Items[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Airplane[0].PhotoPath)
+                @Html.DisplayNameFor(model => model.Airplane.Items[0].PhotoPath)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Airplane) {
+@foreach (var item in Model.Airplane.Items) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)

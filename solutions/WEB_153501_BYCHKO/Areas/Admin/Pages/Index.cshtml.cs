@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WEB_153501_BYCHKO.API.Data;
 using WEB_153501_BYCHKO.Domain.Entities;
+using WEB_153501_BYCHKO.Domain.Models;
 
 namespace WEB_153501_BYCHKO.Areas.Admin.Pages
 {
@@ -19,14 +20,14 @@ namespace WEB_153501_BYCHKO.Areas.Admin.Pages
             _context = context;
         }
 
-        public IList<Airplane> Airplane { get;set; } = default!;
+        public ListModel<Airplane> Airplane { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int pageno)
         {
-            var answer = (await _context.GetProductListAsync(null));
+            var answer = (await _context.GetProductListAsync(null, pageno));
             if (answer.Success)
             {
-                Airplane = answer.Data.Items;
+                Airplane = answer.Data;
             }
         }
     }

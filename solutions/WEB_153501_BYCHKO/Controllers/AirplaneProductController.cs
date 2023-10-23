@@ -19,6 +19,7 @@ namespace WEB_153501_BYCHKO.Controllers
             this._categoryService = categoryService;
         }
 
+        [Route("Catalog/{category?}", Name = "catalog")]
         public async Task<IActionResult> Index(string? category, int pageno)
         {
             // получаем список самолетов
