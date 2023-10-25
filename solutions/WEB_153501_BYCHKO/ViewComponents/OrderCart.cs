@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WEB_153501_BYCHKO.Domain.Models;
+using WEB_153501_BYCHKO.Extensions;
 
 namespace WEB_153501_BYCHKO.ViewComponents
 {
@@ -9,10 +11,13 @@ namespace WEB_153501_BYCHKO.ViewComponents
             return View(GetItems());
         }
 
-        // для иммитации получения данных из какого то места
         private Tuple<int, int> GetItems()
         {
-            return new Tuple<int, int>(127, 7);
+            var cart = HttpContext.Session.Get<Cart>("Cart") ?? new();
+
+            int price = cart.Price;
+            int count = cart.Count;
+            return new Tuple<int, int>(price, count);
         }
     }
 }

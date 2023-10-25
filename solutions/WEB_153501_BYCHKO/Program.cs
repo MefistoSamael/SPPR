@@ -1,3 +1,4 @@
+using WEB_153501_BYCHKO.Domain.Models;
 using WEB_153501_BYCHKO.Models;
 using WEB_153501_BYCHKO.Services.EngineTypeCategoryService;
 using WEB_153501_BYCHKO.Services.ProductService;
@@ -5,10 +6,6 @@ using WEB_153501_BYCHKO.Services.ProductService;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-
-//builder.Services.AddScoped(typeof(ICategoryService),typeof(MemoryCategoryService));
-//builder.Services.AddScoped(typeof(IProductService), typeof(MemoryProductService));
 
 var uriData = builder.Configuration["UriData:ApiUri"];
 
@@ -20,6 +17,8 @@ builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt =>
 opt.BaseAddress = new Uri(uriData!));
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped(typeof(Cart), sp => SessionCart.GetCart(sp));
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -41,6 +40,9 @@ opt.DefaultChallengeScheme = "oidc";
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+
 
 var app = builder.Build();
 
@@ -58,6 +60,7 @@ app.UseRouting();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
