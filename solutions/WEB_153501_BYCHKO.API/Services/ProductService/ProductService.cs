@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WEB_153501_BYCHKO.API.Data;
+using WEB_153501_BYCHKO.API.Models;
 using WEB_153501_BYCHKO.Domain.Entities;
 using WEB_153501_BYCHKO.Domain.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -14,13 +16,12 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
         private readonly IWebHostEnvironment env;
         private readonly IHttpContextAccessor accessor;
 
-        public ProductService(AppDbContext context, ConfigurationManager configurationManager,
+        public ProductService(AppDbContext context,
                             IWebHostEnvironment env,
-                            IHttpContextAccessor accessor)
+                            IHttpContextAccessor accessor, IOptions<ConfigData> options)
         {
             _context = context;
-
-            _maxPageSize = Convert.ToInt32(configurationManager["MaxPageSize"]);
+            _maxPageSize = options.Value.MaxPageSize;
             this.env = env;
             this.accessor = accessor;
 
@@ -107,7 +108,8 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
             // иф такой хитрый, чтобы учесть плюс одну страницу, если она не полностью заполнена
             if (pageNo * pageSize - count > pageSize)
             {
-                throw new Exception("page number are greater then amount of pages");
+                response.Success = false;
+                response.ErrorMessage = "page number are greater then amount of pages";
             }
 
             listModel.Items = await query.Skip((pageNo - 1) * 3). // пропускаем элементы, которые не будут отображены

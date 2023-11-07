@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using WEB_153501_BYCHKO.API.Data;
+using WEB_153501_BYCHKO.API.Models;
 using WEB_153501_BYCHKO.API.Services;
 using WEB_153501_BYCHKO.API.Services.CategoryService;
 using WEB_153501_BYCHKO.API.Services.ProductService;
@@ -25,6 +26,8 @@ builder.Services.AddSingleton(typeof(ConfigurationService));
 // нужен для получения макисмального количества страниц в
 // productService
 builder.Services.AddSingleton(builder.Configuration);
+
+builder.Services.Configure<ConfigData>(builder.Configuration.GetSection("ConfigData"));
 
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductService));
 builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
@@ -65,3 +68,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

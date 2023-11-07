@@ -31,8 +31,11 @@ namespace WEB_153501_BYCHKO.Controllers
                 return NotFound(productResponse.ErrorMessage);
 
             // получаем все категории
-            
-            var categories = _categoryService.GetCategoryListAsync().Result.Data;
+            var categoriesResponse = await _categoryService.GetCategoryListAsync();
+            if (!categoriesResponse.Success)
+                return NotFound(categoriesResponse.ErrorMessage);
+
+            var categories = categoriesResponse.Data;
 
             // currentCategory вынесено в отдельную переменную, чтобы проверить на null и, в случае null, передать 
             // в представление строку "Все"

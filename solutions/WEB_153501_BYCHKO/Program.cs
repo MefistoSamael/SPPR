@@ -1,9 +1,18 @@
+using Serilog;
 using WEB_153501_BYCHKO.Domain.Models;
+using WEB_153501_BYCHKO.Middleware;
 using WEB_153501_BYCHKO.Models;
 using WEB_153501_BYCHKO.Services.EngineTypeCategoryService;
 using WEB_153501_BYCHKO.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .CreateBootstrapLogger();
+
+builder.Host.UseSerilog((ctx, lc) => lc
+        .ReadFrom.Configuration(ctx.Configuration));
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -56,8 +65,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
-app.UseRouting();
 app.UseHttpsRedirection();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
+
+app.UseRouting();
 
 app.UseAuthorization();
 app.UseSession();
