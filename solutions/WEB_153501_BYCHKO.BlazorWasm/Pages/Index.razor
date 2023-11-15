@@ -1,8 +1,16 @@
 ﻿@page "/"
+@using System.Text;
+@using WEB_153501_BYCHKO.Domain.Entities;
+@using WEB_153501_BYCHKO.Domain.Models;
+@using WEB_153501_BYCHKO.BlazorWasm.Components; 
 
+@inject HttpClient _httpClient
+
+<CategorySelector SelectedCategory="@SelectedName"></CategorySelector>
+<ObjectsList ObjSelected="@FindAirPlane" />
+<Pager Category="@Category"> </Pager>
+<ObjectDetails Selectedobject="@SelectedObject" />
 <PageTitle>Index</PageTitle>
-
-<h1>Hello, world!</h1>
 
 <div class="alert alert-warning" role="alert">
     Before authentication will function correctly, you must configure your provider details in <code>Program.cs</code>
@@ -10,4 +18,36 @@
 
 Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+<h1>@productErrMsg</h1>
+
+@code{
+    string? productErrMsg = "a";
+    bool errProduct = false;
+
+    [Inject]
+    public IDataService? _dataService { get; set; }
+
+    public Airplane SelectedObject { get; set; }
+
+    [Parameter] public string Category { get; set; }
+
+    public string SelectedName { get; set; }
+
+    public void FindAirPlane(int id)
+    {
+        SelectedObject = _dataService.ObjectsList.First(d => d.Id == id);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await _dataService!.GetProductListAsync(Category);
+
+        await _dataService!.GetCategoryListAsync();
+        if (Category != null)
+            SelectedName = _dataService.Categories
+                                       .FirstOrDefault(c =>
+                                       c.NormalizedName.Equals(Category))!.Name;
+        else SelectedName = "Все";
+    }
+}

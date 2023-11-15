@@ -18,10 +18,10 @@ namespace WEB_153501_BYCHKO.API.Services.ProductService
 
         public ProductService(AppDbContext context,
                             IWebHostEnvironment env,
-                            IHttpContextAccessor accessor, IOptions<ConfigData> options)
+                            IHttpContextAccessor accessor)
         {
             _context = context;
-            _maxPageSize = options.Value.MaxPageSize;
+            _maxPageSize = 20;
             this.env = env;
             this.accessor = accessor;
 

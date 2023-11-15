@@ -121,10 +121,10 @@ namespace _153501_Bychko.Tests
         [Fact]
         public void GetProductListAsync_Default_ThreeObject_CorrectPageCountCalculation()
         {
-            Mock<IOptions<ConfigData>> opt = new();
-            opt.Setup(o => o.Value).Returns(new ConfigData { MaxPageSize=20});
+            //Mock<IOptions<ConfigData>> opt = new();
+            //opt.Setup(o => o.Value).Returns(new ConfigData { MaxPageSize=20});
             var context = GetContext();
-            var productService = new ProductService(context, env.Object, accessor.Object, opt.Object);
+            var productService = new ProductService(context, env.Object, accessor.Object);
 
             var result = productService.GetProductListAsync(null).Result;
             Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
@@ -135,63 +135,63 @@ namespace _153501_Bychko.Tests
             Assert.Equal(context.airplanes.First(), result.Data.Items[0]);
         }
 
-        //[Theory]
-        //[InlineData(2)]
-        //public void GetProductListAsync_ReturnsRightPage(int pageno)
-        //{
-        //    var context = GetContext();
-        //    var productService = new ProductService(context, env.Object, accessor.Object);
+        [Theory]
+        [InlineData(2)]
+        public void GetProductListAsync_ReturnsRightPage(int pageno)
+        {
+            var context = GetContext();
+            var productService = new ProductService(context, env.Object, accessor.Object);
 
-        //    var result = productService.GetProductListAsync(null, pageno).Result;
-        //    Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
-        //    Assert.True(result.Success);
-        //    Assert.Equal(2, result.Data.CurrentPage);
-        //    Assert.Equal(1, result.Data.Items.Count);
-        //    Assert.Equal(2, result.Data.TotalPages);
-        //}
+            var result = productService.GetProductListAsync(null, pageno).Result;
+            Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
+            Assert.True(result.Success);
+            Assert.Equal(2, result.Data.CurrentPage);
+            Assert.Equal(1, result.Data.Items.Count);
+            Assert.Equal(2, result.Data.TotalPages);
+        }
 
-        //[Theory]
-        //[InlineData("cat1")]
-        //public void GetProductListAsync_ReturnsRightElements(string category)
-        //{
-        //    var context = GetContext();
-        //    var productService = new ProductService(context, env.Object, accessor.Object);
+        [Theory]
+        [InlineData("cat1")]
+        public void GetProductListAsync_ReturnsRightElements(string category)
+        {
+            var context = GetContext();
+            var productService = new ProductService(context, env.Object, accessor.Object);
 
-        //    List<Airplane> requiredResult = new() { context.airplanes.Find(1), context.airplanes.Find(4) };
+            List<Airplane> requiredResult = new() { context.airplanes.Find(1), context.airplanes.Find(4) };
 
-        //    var result = productService.GetProductListAsync(category).Result;
-        //    Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
-        //    Assert.True(result.Success);
-        //    Assert.Equal(1, result.Data.CurrentPage);
-        //    Assert.Equal(2, result.Data.Items.Count);
-        //    Assert.Equal(1, result.Data.TotalPages);
-        //    Assert.Equal(requiredResult, result.Data.Items);
-        //}
+            var result = productService.GetProductListAsync(category).Result;
+            Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
+            Assert.True(result.Success);
+            Assert.Equal(1, result.Data.CurrentPage);
+            Assert.Equal(2, result.Data.Items.Count);
+            Assert.Equal(1, result.Data.TotalPages);
+            Assert.Equal(requiredResult, result.Data.Items);
+        }
 
-        //[Fact]
-        //public void GetProductListAsync_CorrectMaxPageSize()
-        //{
-        //    var context = GetContext();
-        //    var productService = new ProductService(context, env.Object, accessor.Object);
+        [Fact]
+        public void GetProductListAsync_CorrectMaxPageSize()
+        {
+            var context = GetContext();
+            var productService = new ProductService(context, env.Object, accessor.Object);
 
 
-        //    var result = productService.GetProductListAsync(null, 1, pageSize: 21).Result;
-        //    Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
-        //    Assert.True(result.Success);
+            var result = productService.GetProductListAsync(null, 1, pageSize: 21).Result;
+            Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
+            Assert.True(result.Success);
 
-        //    Assert.True(result.Data.Items.Count <= maxPageSize);
-        //}
+            Assert.True(result.Data.Items.Count <= maxPageSize);
+        }
 
-        //[Fact]
-        //public void GetProductListAsync_Pageno_GT_PageCount_ReturnsFalse()
-        //{
-        //    var context = GetContext();
-        //    var productService = new ProductService(context, env.Object, accessor.Object);
+        [Fact]
+        public void GetProductListAsync_Pageno_GT_PageCount_ReturnsFalse()
+        {
+            var context = GetContext();
+            var productService = new ProductService(context, env.Object, accessor.Object);
 
-        //    var result = productService.GetProductListAsync(null, 3).Result;
-        //    Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
-        //    Assert.True(!result.Success);
-        //}
+            var result = productService.GetProductListAsync(null, 3).Result;
+            Assert.IsType<ResponseData<ListModel<Airplane>>>(result);
+            Assert.True(!result.Success);
+        }
 
     }
 }

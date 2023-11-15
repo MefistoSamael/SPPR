@@ -1,9 +1,4 @@
-﻿using Azure;
-using Azure.Core;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using NuGet.Common;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Authentication;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -154,17 +149,17 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             // добавить категорию в маршрут
             if (categoryNormalizedName != null)
             {
-                urlString.Append($"{categoryNormalizedName}/");
+                urlString.Append($"category={categoryNormalizedName}/");
             };
             // добавить номер страницы в маршрут
             if (pageNo > 1)
             {
-                urlString.Append($"pageno{pageNo}");
+                urlString.Append($"pageno{pageNo}/");
             };
             // добавить размер страницы в строку запроса
             if (!_pageSize!.Equals("3"))
             {
-                urlString.Append(QueryString.Create("pagesize", _pageSize));
+                urlString.Append($"pagesize{_pageSize}/");
             }
 
             // полчуение токена
@@ -180,10 +175,9 @@ namespace WEB_153501_BYCHKO.Services.ProductService
             {
                 try
                 {
-                    //#pragma warning disable CS8603 // Possible null reference return.
-                    var content = response.Content;     
+                    #pragma warning disable CS8603 // Possible null reference return.    
                     return await response.Content.ReadFromJsonAsync<ResponseData<ListModel<Airplane>>>();
-//#pragma warning restore CS8603 // Possible null reference return.
+                    #pragma warning restore CS8603 // Possible null reference return.
 
                 }
                 catch (JsonException ex)

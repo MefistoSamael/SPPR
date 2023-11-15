@@ -34,7 +34,6 @@ namespace WEB_153501_BYCHKO.Services.EngineTypeCategoryService
                 try
                 {
                     //#pragma warning disable CS8603 // Possible null reference return.
-                    var content = response.Content;
                     return await response.Content.ReadFromJsonAsync<ResponseData<List<EngineTypeCategory>>>();
                     //#pragma warning restore CS8603 // Possible null reference return.
 

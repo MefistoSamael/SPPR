@@ -1,0 +1,44 @@
+﻿@inject IDataService _dataService
+@implements IDisposable
+
+@if (_dataService.Success)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var plane in _dataService.ObjectsList)
+            {
+                <tr>
+                    <td>@plane.Name</td>
+                    <td>@plane.Description</td>
+                    <td>
+                        <button @onclick="(async () => await ObjSelected.InvokeAsync(plane.Id))">
+                            <span class="oi oi-zoom-in" aria-hidden="true"></span> Подробнее
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<int> ObjSelected { get; set; }
+
+     protected override void OnInitialized()
+     {
+         _dataService.DataLoaded += StateHasChanged;
+     }
+ 
+     public void Dispose()
+     {
+        _dataService.DataLoaded -= StateHasChanged;
+     }
+}

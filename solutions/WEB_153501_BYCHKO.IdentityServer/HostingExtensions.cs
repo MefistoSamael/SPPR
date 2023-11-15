@@ -12,7 +12,6 @@ namespace WEB_153501_BYCHKO.IdentityServer
         public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddRazorPages();
-
             builder.Services.AddControllers();
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>

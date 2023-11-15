@@ -33,15 +33,18 @@ namespace WEB_153501_BYCHKO.API.Controllers
         // GET: api/Airplanes
         [HttpGet]
         [Route("")]
-        [Route("{category}/pageno{pageno:int}/pagesize{pagesize:int}")]
-        [Route("{category}/pageno{pageno:int}")]
-        [Route("{category}/pagesize{pagesize:int}")]
+        [Route("category={category}/pageno{pageno:int}/pagesize{pagesize:int}")]
+        [Route("category={category}/pageno{pageno:int}")]
+        [Route("category={category}/pagesize{pagesize:int}")]
         [Route("pageno{pageno:int}/pagesize{pagesize:int}")]
         [Route("pageno{pageno:int}")]
-        [Route("{category}")]
+        [Route("category={category}")]
+        [Route("pagesize{pagesize:int}")]
+        //[Authorize]
         public async Task<ActionResult<IEnumerable<Airplane>>> Getairplanes(string? category = null, int pageNo = 1, int pageSize = 3)
         {
             var responde = await _service.GetProductListAsync(category, pageNo, pageSize);
+            
             if (!responde.Success)
             {
                 return NotFound();

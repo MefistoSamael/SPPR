@@ -10,14 +10,23 @@ using WEB_153501_BYCHKO.API.Services.ProductService;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddAuthorization();
+builder.Services
+.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(opt =>
+{
+    opt.Authority = builder.Configuration.GetSection("isUri").Value;
+    opt.TokenValidationParameters.ValidateAudience = false;
+    opt.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
 // нужен для получения appUrl из launchsettings.json в
 // productService
@@ -34,23 +43,19 @@ builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services
-.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(opt =>
+builder.Services.AddCors(options =>
 {
-    opt.Authority = builder.Configuration.GetSection("isUri").Value;
-    opt.TokenValidationParameters.ValidateAudience = false;
-    opt.TokenValidationParameters.ValidTypes =
-    new[] { "at+jwt" };
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://localhost:7004")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
 });
-
-
 
 var app = builder.Build();
 
 await DbInitializer.SeedData(app);
-
-app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -60,10 +65,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.MapControllers();
 

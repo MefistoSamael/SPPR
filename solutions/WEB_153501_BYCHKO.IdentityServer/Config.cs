@@ -53,11 +53,12 @@ namespace WEB_153501_BYCHKO.IdentityServer
                 ClientId = "blazorApp",
                 AllowedGrantTypes = GrantTypes.Code,
                 RequireClientSecret = false,
+                AllowedCorsOrigins = { "https://localhost:7004" },
+
                 RedirectUris = {
                 "https://localhost:7004/authentication/login-callback" },
                 PostLogoutRedirectUris = {
                 "https://localhost:7004/authentication/logout-callback" },
-                AllowedCorsOrigins = { "https://localhost:7004" },
 
                 AllowOfflineAccess = true,
                 AllowedScopes = { "openid", "profile", "api.read","api.write"}

@@ -1,0 +1,33 @@
+﻿@inject IDataService _dataService
+
+<!-- выбор категории -->
+<div class="col-2 border-2">
+    <ul class="nav ">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               data-bs-toggle="dropdown"
+               href="#"
+               role="button">
+                @SelectedCategory
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <NavLink class="dropdown-item" href="@path">Все</NavLink>
+
+                </li>
+                @foreach (var item in _dataService.Categories)
+                {
+                    <li>
+                        <NavLink class="dropdown-item" href="@(path + item.NormalizedName)">@item.Name</NavLink>
+                    </li>
+                }
+            </ul>
+        </li>
+    </ul>
+</div><!-- выбор категории -->
+@code{
+    [Parameter]
+    [EditorRequired]
+    public string SelectedCategory { get; set; }
+    private string path { get; set; } = "/catalog/";
+}
