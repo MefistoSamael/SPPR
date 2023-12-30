@@ -1,10 +1,10 @@
-В данном проекте затронуты такие темы как:
+<pre>In this project, the following topics are covered:
 
-Построение REST API
-Использование Razor Pages
-Аутентификация при помощи собственного сервера, созданного на базе Duende IdentityServer
-Создание и использование кастомных тег хелперов
-Передача состояния с помощью сессии
-Тестироване с использованием xUnit
-Создание кастомного middleware для логгирования
-Использование Blazor WebAssembly
+Building a REST API.
+Using Razor Pages.
+Authentication using a custom server built on the Duende IdentityServer.
+Creating and utilizing custom tag helpers.
+State management using sessions.
+Testing with xUnit.
+Creating custom middleware for logging.
+Utilizing Blazor WebAssembly.<pre/>
